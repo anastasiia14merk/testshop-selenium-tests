@@ -18,6 +18,19 @@ class ProductPage(BasePage):
     def continue_shopping(self):
         wait = WebDriverWait(self.driver, 10)
         continue_shopping_button = wait.until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, '#modal_5 button.btn-secondary.'))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '#modal_5 button.btn-secondary'))
         )
         continue_shopping_button.click()
+        wait.until(
+            EC.invisibility_of_element_located((By.ID, "modal_5"))
+        )
+        wait.until(self.cart_has_one_item)
+
+    def cart_has_one_item(self, driver):
+        counters = driver.find_elements(By.CSS_SELECTOR, ".my_cart_quantity")
+        for counter in counters:
+            if counter.text.strip() == "1":
+                return True
+        return False
+
+
