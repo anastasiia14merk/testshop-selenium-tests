@@ -3,6 +3,7 @@ import pytest
 from pages.base_page import BasePage
 from pages.cart_page import CartPage
 from pages.product_page import ProductPage
+from pages.desks_page import DesksPage
 
 def test_add_to_cart(driver):
     product_page = ProductPage(driver)
@@ -27,6 +28,14 @@ def test_product_quantity_minus_one(cart_with_one_item):
     cart_page.remove_product_from_cart()
     assert cart_page.empty_cart_title() == 'Your cart is empty!'
 
+
+def test_open_customizable_desk(driver):
+    desk_page = DesksPage(driver)
+    desk_page.open()
+    desk_page.open_customizable_desk()
+
+    product_page = ProductPage(driver)
+    assert product_page.get_product_name() == "Customizable Desk"
 
 
 

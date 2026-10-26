@@ -33,4 +33,12 @@ class ProductPage(BasePage):
                 return True
         return False
 
+    def get_product_name(self):
+        wait = WebDriverWait(self.driver, 10)
+        product_name = wait.until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, 'h1[itemprop="name"]')
+            )
+        )
+        return product_name.text.strip()
 
