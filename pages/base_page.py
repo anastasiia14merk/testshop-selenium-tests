@@ -1,7 +1,6 @@
 from decimal import Decimal
 
 import allure
-from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -16,7 +15,6 @@ class BasePage:
         self.wait = WebDriverWait(
             driver,
             config.WAIT_TIMEOUT,
-            ignored_exceptions=(StaleElementReferenceException,),
         )
 
     @allure.step("Open the page")
@@ -54,5 +52,4 @@ class BasePage:
 
     @staticmethod
     def parse_price(text):
-        # В магазине запятая отделяет тысячи: "1,500.00" -> Decimal("1500.00").
         return Decimal(text.replace(",", "").replace("\u00a0", "").strip())
