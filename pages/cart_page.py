@@ -48,7 +48,7 @@ class CartPage(BasePage):
 
     @allure.step("Read the name of {product_name}")
     def get_product_name(self, product_name):
-        def read_name(driver):
+        def read_name(_driver):
             row = self._find_product_row(product_name)
             return row.find_element(*self.PRODUCT_NAME).text.strip()
 
@@ -56,7 +56,7 @@ class CartPage(BasePage):
 
     @allure.step("Read the cart quantity of {product_name}")
     def get_product_quantity(self, product_name):
-        def read_quantity(driver):
+        def read_quantity(_driver):
             row = self._find_product_row(product_name)
             return row.find_element(*self.QUANTITY).get_property("value")
 
@@ -64,7 +64,7 @@ class CartPage(BasePage):
 
     @allure.step("Read the line total of {product_name}")
     def get_total_price(self, product_name):
-        def read_price(driver):
+        def read_price(_driver):
             row = self._find_product_row(product_name)
             return row.find_element(*self.LINE_TOTAL).text.strip()
 
@@ -73,7 +73,7 @@ class CartPage(BasePage):
     def _change_quantity(self, product_name, button_label):
         self.wait_for_page_ready()
 
-        def click_button(driver):
+        def click_button(_driver):
             button = self._find_product_row(product_name).find_element(
                 By.CSS_SELECTOR, f'a[aria-label="{button_label}"]'
             )
@@ -90,7 +90,7 @@ class CartPage(BasePage):
 
     @allure.step("Wait for {product_name} quantity to become {expected_quantity}")
     def wait_for_quantity(self, expected_quantity, product_name):
-        def quantity_matches(driver):
+        def quantity_matches(_):
             row = self._find_product_row(product_name)
             return int(row.find_element(*self.QUANTITY).get_property("value")) == expected_quantity
 
@@ -101,7 +101,7 @@ class CartPage(BasePage):
 
     @allure.step("Wait for {product_name} line total to become {expected_total}")
     def wait_for_product_total(self, expected_total, product_name):
-        def total_matches(driver):
+        def total_matches(_):
             row = self._find_product_row(product_name)
             return self.parse_price(row.find_element(*self.LINE_TOTAL).text) == expected_total
 
