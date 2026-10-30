@@ -22,21 +22,11 @@ jobs:
           python-version: '3.14'
           cache: pip
 
-      - name: Set up Chrome
-        id: chrome
-        uses: browser-actions/setup-chrome@v2
-        with:
-          chrome-version: stable
-          install-dependencies: true
-          install-chromedriver: true
-
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
 
       - name: Run UI tests
-        env:
-          CHROME_BINARY: ${{ steps.chrome.outputs.chrome-path }}
-        run: python -m pytest --headless -v --junitxml=test-results.xml
+        run: xvfb-run -a python -m pytest -v --junitxml=test-results.xml
 
       - name: Save test results and failure attachments
         if: always()

@@ -23,11 +23,11 @@ pages/
 tests/                 # Cart, product and category scenarios
 config.py              # Base URL and timeout, with environment overrides
 data.py                # Shared catalog and variant names
-conftest.py            # Chrome options, fixtures and failure attachments
+conftest.py            # Browser fixture, cart setup and failure attachments
 pytest.ini             # Test discovery and Allure output
 requirements.txt       # Pinned Python dependencies
 .github/workflows/
-    ui-tests.yml       # GitHub Actions headless Chrome run and result artifacts
+    ui-tests.yml       # GitHub Actions Chrome run and result artifacts
 ```
 
 Page objects contain browser actions; scenario-specific assertions stay in tests.
@@ -73,12 +73,9 @@ On Windows, activate with `venv\Scripts\activate` instead.
 
 ```bash
 python -m pytest -v
-python -m pytest --headless -v
-python -m pytest --headless --window-size=1440,1000 -v
 ```
 
-The default is a visible, maximized Chrome window. Headless mode defaults to
-1920 by 1080 pixels. Set `CHROME_BINARY` if Chrome is installed at a custom path.
+Each test opens a visible, maximized Chrome window and closes it afterwards.
 
 Run one file or scenario:
 
@@ -90,7 +87,7 @@ python -m pytest tests/test_product.py::test_select_aluminium -v
 `config.py` supplies the shared base URL and wait timeout. Environment overrides:
 
 ```bash
-TESTSHOP_WAIT_TIMEOUT=20 python -m pytest --headless -v
+TESTSHOP_WAIT_TIMEOUT=20 python -m pytest -v
 TESTSHOP_BASE_URL=http://testshop.qa-practice.com python -m pytest -v
 ```
 
@@ -126,8 +123,9 @@ hide the test failure or prevent the remaining attachments.
 
 ## GitHub Actions
 
-The workflow runs the suite in headless Chrome on pushes and pull requests, and can
-also be started manually. It saves Allure results (including failure attachments)
+The workflow runs the suite in Chrome on pushes and pull requests, and can also
+be started manually. It uses the runner's preinstalled Chrome and `xvfb-run` to
+provide a virtual display for the regular browser fixture. It saves Allure results (including failure attachments)
 and a JUnit XML summary as `ui-test-results` artifacts for seven days.
 A local run does not confirm that a workflow has run on GitHub; check its Actions
 status after publishing the changes.

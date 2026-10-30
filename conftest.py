@@ -1,5 +1,3 @@
-import os
-
 import allure
 import pytest
 from selenium import webdriver
@@ -10,38 +8,12 @@ from pages.cart_page import CartPage
 from pages.product_page import ProductPage
 
 
-def pytest_addoption(parser):
-    parser.addoption(
-        "--headless", action="store_true", default=False,
-        help="Run Chrome without opening a browser window.",
-    )
-    parser.addoption(
-        "--window-size", default="1920,1080", metavar="WIDTH,HEIGHT",
-        help="Browser window size in headless mode (default: 1920,1080).",
-    )
-
-
 @pytest.fixture
 @allure.title("Chrome browser")
-def driver(request):
-    options = webdriver.ChromeOptions()
-    if os.environ.get("CHROME_BINARY"):
-        options.binary_location = os.environ["CHROME_BINARY"]
-    if request.config.getoption("--headless"):
-        options.add_argument("--headless=new")
-        size = request.config.getoption("--window-size")
-        try:
-            width, height = (int(value) for value in size.split(","))
-            if width <= 0 or height <= 0:
-                raise ValueError
-        except ValueError as error:
-            raise pytest.UsageError("--window-size must contain positive WIDTH,HEIGHT values") from error
-        options.add_argument(f"--window-size={width},{height}")
-
-    browser = webdriver.Chrome(options=options)
+def driver():
+    browser = webdriver.Chrome()
     try:
-        if not request.config.getoption("--headless"):
-            browser.maximize_window()
+        browser.maximize_window()
         yield browser
     finally:
         browser.quit()

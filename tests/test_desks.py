@@ -31,14 +31,12 @@ def test_products_have_names_and_prices(driver):
     products = desk_page.get_products()
 
     with allure.step('Verify names and positive numeric prices'):
-        assert products, 'The category contains no products'
+        assert products
         for product in products:
-            assert product['name'], 'A product name is missing'
-            assert product['price'] > 0, (
-                f"Invalid price for {product['name']}: {product['price']}"
-            )
+            assert product['name']
+            assert product['price'] > 0
         desks = [product for product in products if product['name'] == DESK_NAME]
-        assert len(desks) == 1, 'The expected desk card is missing or duplicated'
+        assert len(desks) == 1
         catalog_price = desks[0]['price']
 
     desk_page.open_customizable_desk()
@@ -70,15 +68,13 @@ def test_switch_to_list_view(driver):
     products_before = desk_page.get_products()
 
     with allure.step('Verify the initial grid layout and loaded products'):
-        assert products_before, 'The category contains no products'
-        assert not desk_page.is_list_view(), 'The category already uses list layout'
+        assert products_before
+        assert not desk_page.is_list_view()
 
     desk_page.switch_to_list_view()
     with allure.step('Verify the applied list layout'):
-        assert desk_page.is_list_view(), 'The product container still uses grid layout'
+        assert desk_page.is_list_view()
 
     products_after = desk_page.get_products()
     with allure.step('Verify that products are preserved in list view'):
-        assert products_after == products_before, (
-            'Product names, prices or order changed after switching the view'
-        )
+        assert products_after == products_before
