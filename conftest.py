@@ -53,5 +53,4 @@ def pytest_runtest_makereport(item, call):
         try:
             allure.attach(read_value(), name=name, attachment_type=attachment_type)
         except WebDriverException:
-            # Each attachment is independent; a closed browser must not hide the failure.
             continue
