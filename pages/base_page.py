@@ -26,7 +26,6 @@ class BasePage:
 
     @allure.step("Wait for the TestShop application to be ready")
     def wait_for_page_ready(self):
-        # Сначала ждём загрузки модуля магазина, затем — окончания его запуска.
         self.wait.until(lambda driver: driver.execute_script(
             "return Boolean(window.odoo?.loader?.modules?.get('root.widget'));"
         ))
