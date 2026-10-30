@@ -1,5 +1,3 @@
-"""Shared settings; environment overrides also work in CI."""
-
 import os
 
 BASE_URL = os.getenv("TESTSHOP_BASE_URL", "http://testshop.qa-practice.com")
